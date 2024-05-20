@@ -67,9 +67,3 @@
 *.js linguist-detectable=false
 *.css linguist-detectable=false
 *.html linguist-detectable=false
-public/js/* linguist-vendored
-wwwroot/js/* linguist-vendored
-public/css/* linguist-vendored
-wwwroot/css/* linguist-vendored
-public/html/* linguist-vendored
-wwwroot/html/* linguist-vendored
