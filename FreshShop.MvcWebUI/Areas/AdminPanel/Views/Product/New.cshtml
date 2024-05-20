@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewData["Title"] = "New";
+    Layout = "~/Areas/AdminPanel/Views/Shared/_Layout.cshtml";
+}
+
+@model List<SelectListItem>
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+
+@section scripts{ 
+    <script>
+        $(document).ready(function () {
+            $("#btnSave").click(function () {
+                var vm = {
+                    ProductName : $("#txtProductName").val(),
+                    Price : $("#txtPrice").val(),
+                    Discount : $("#txtDiscount").val(),
+                    CategoryID : $("#ddlCategories").val(),
+                    ShortDescription: $("#txtShortDescription").val()
+                };
+
+                $.ajax({
+                    url: "/AdminPanel/Product/New",
+                    method : "post",
+                    dataType: "Json",
+                    data: { vm: vm },
+                    success: function (resp) {
+                        if (resp.isOk) {
+
+                            var formData = new FormData();
+                            var files = $("#fuPhoto")[0].files;
+
+                            $.each(files, function (i,file) {
+                                formData.append("image[]", file);
+                            });                            
+
+                            formData.append("prdID", resp.productID);
+
+                            $.ajax({
+                                url: "/AdminPanel/Product/PhotoUpload",
+                                method: "POST",
+                                data: formData,
+                                contentType: false,
+                                processData: false,
+                                success: function (response) {
+                                    if (response.isOk) {
+                                        window.location.href="/AdminPanel/Product/Index"
+                                    }
+                                    else {
+                                        alert("Ürün Kaydedilemedi.");
+                                    }
+                                }
+                            });                            
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<div class="col-md-12">
+    <div class="card card-primary">
+
+        <div class="card-header">
+            <h3 class="card-title">Yeni Ürün Kayıt Formu</h3>
+        </div>
+
+        <form>
+
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Ürün Adı</label>
+                    <input type="text" class="form-control" id="txtProductName" placeholder="Ürün Adını Giriniz">
+                </div>
+                <div class="form-group">
+                    <label>Fiyat</label>
+                    <input type="text" class="form-control" id="txtPrice" placeholder="Fiyatını Giriniz.">
+                </div>
+                <div class="form-group">
+                    <label>İndirim</label>
+                    <input type="text" class="form-control" id="txtDiscount" placeholder="İndirim">
+                </div>
+                <div class="form-group">
+                    <label>Ürün Açıklaması</label>
+                    <textarea id="txtShortDescription" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Kategorisi</label>
+                    <select id="ddlCategories" class="form-control" asp-items="Model"></select>
+                </div>
+                <div class="form-group">
+                    <label>Fotoğraflar</label>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="fuPhoto" multiple>
+                            <label class="custom-file-label">Fotoğraf Seç</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button id="btnSave" type="button" class="btn btn-primary">Kaydet</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+

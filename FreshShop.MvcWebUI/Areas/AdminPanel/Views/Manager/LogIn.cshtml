@@ -1,0 +1,178 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+    
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FreshShop | Log in</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/AdminPanelContent/plugins/fontawesome-free/css/all.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="/AdminPanelContent/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Theme style -->
+    <link href="/AdminPanelContent/plugins/sweetalert2/sweetalert2.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/AdminPanelContent/dist/css/adminlte.min.css">
+</head>
+
+
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="../../index2.html"><b>Fresh</b>Shop</a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Oturum açmak için giriş yapınız.</p>
+
+
+                <form>
+                    <div class="input-group mb-3">
+                        <input id="txtUserName" type="text" class="form-control" placeholder="Kullanıcı Adı" value="@ViewData["cookie_UN"]">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input id="txtPassword" type="password" class="form-control" placeholder="Şifre" value="@ViewData["cookie_PW"]">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="icheck-primary">
+                                <input type="checkbox" id="remember" @( (bool)ViewData["chisChecked"] ? "checked=\"checked\"" : null)>
+                                <label for="remember">
+                                    Beni Hatırla
+                                </label>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-4">
+                            <button id="btnLogIn" type="button" class="btn btn-primary btn-block">Giriş</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </form>
+
+                <p class="mb-1">
+                    <a href="#" data-toggle="modal" data-target="#divForgotPassword">Şifremi Unuttum</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="divForgotPassword">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Şifremi Unuttum</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="form-control" id="txtEmail"/>
+                        <small id="emailHelp" class="form-text text-muted">Kayıtlı mail adresinizi giriniz.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                    <button id="btnSendPassword" type="button" class="btn btn-primary">Şifremi Gönder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /.login-box -->
+    <!-- jQuery -->
+    <script src="/AdminPanelContent/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="/AdminPanelContent/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/AdminPanelContent/dist/js/adminlte.min.js"></script>
+    <script src="/AdminPanelContent/plugins/sweetalert2/sweetalert2.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#btnLogIn").click(function () {
+
+                var username = $('#txtUserName').val();
+                var password = $('#txtPassword').val();
+                var isChecked = $('#remember').is(":checked");
+
+                var clientData = {
+                    UserName: username,
+                    Password: password,
+                    RememberMe: isChecked
+                };
+
+                $.ajax({
+                    url: "/AdminPanel/Manager/LogIn",
+                    type: "POST",
+                    dataType: "JSON",
+                    data: { vm: clientData },
+                    success: function (resp) {
+                        if (resp.isOk)
+                            window.location.href = "/AdminPanel/DashBoard/Index"
+                        else
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Kullanıcı Bulunamadı.',
+                                html: resp.message
+                            })
+                    }
+                });
+            });
+
+            $("#btnSendPassword").click(function () {
+                var vm = {
+                    Email: $("#txtEmail").val()
+                };
+
+                $.ajax({
+                    url: "/AdminPanel/Manager/ForgotPassword",
+                    method: "post",
+                    dataType: "json",
+                    data: { vm: vm },
+                    success: function (resp) {
+                        if (resp.isOk) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Şifreniz başarıyla gönderildi.',
+                                text: resp.message
+                            })
+                        }
+                        else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Şifre gönderme başarısız.',
+                                text: resp.message
+                            })
+                        }
+                    }
+                });
+
+            });
+        });        
+
+    </script>
+
+</body>
+</html>

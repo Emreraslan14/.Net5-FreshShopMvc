@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/AdminPanel/Views/Shared/_Layout.cshtml";
+}
+
+@model FreshShop.Model.ViewModels.ProductCountOfCategoriesVm
+
+@section styles{
+    <link rel="stylesheet" href="/AdminPanelContent/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/AdminPanelContent/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/AdminPanelContent/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+}
+
+@section scripts{
+    <script src="/AdminPanelContent/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/AdminPanelContent/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/AdminPanelContent/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/AdminPanelContent/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/AdminPanelContent/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/AdminPanelContent/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="/AdminPanelContent/plugins/jszip/jszip.min.js"></script>
+    <script src="/AdminPanelContent/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="/AdminPanelContent/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="/AdminPanelContent/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="/AdminPanelContent/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="/AdminPanelContent/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <script>
+        $(function () {
+            $("#tblCategories").DataTable({
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": false,
+                "search": true,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            //$('#example2').DataTable({
+            //    "paging": true,
+            //    "lengthChange": true,
+            //    "searching": false,
+            //    "ordering": true,
+            //    "info": true,
+            //    "autoWidth": false,
+            //    "responsive": true,
+            //});
+        });
+    </script>
+}
+
+<h2 class="card-title">Sistemdeki Kayıtlı Kategoriler</h2>
+
+<br/>
+<br />
+
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">            
+            <br />
+            <a href="/AdminPanel/Manager/New" class="btn btn-info">Yeni Kategori</a>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <table id="tblManagers" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <td>Kategori Adı</td>
+                        <td>Ürün Sayısı</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Categories)
+                    {
+                        <tr>
+                            <td>@item.CategoryName</td>   
+                            @{
+                                int toplam = 0;
+                            }
+                            @foreach(var prod in Model.Products)
+                            {
+                                @if (prod.CategoryID == item.ID)
+                                { 
+                                    toplam = toplam + 1;
+                                }
+                            }
+                            <td>@toplam</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

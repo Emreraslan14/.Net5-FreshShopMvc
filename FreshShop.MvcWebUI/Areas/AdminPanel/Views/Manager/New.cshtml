@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewData["Title"] = "New";
+    Layout = "~/Areas/AdminPanel/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{ 
+    <script>
+        $(document).ready(function(){
+            $("#btnSave").click(function () {
+                var formData = new FormData();
+                var file = $("#fuPhoto")[0].files[0];
+                formData.append("photo", file);
+
+                $.ajax({
+                    url: "/AdminPanel/Manager/UploadPhoto",
+                    method: "POST",
+                    data : formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (resp) {
+                        if (resp.isOk) {
+                            var vm = {
+                                FullName: $("#txtFullName").val(),
+                                UserName: $("#txtUserName").val(),
+                                Password: $("#txtPassword").val(),
+                                Email: $("#txtEmail").val(),
+                                PhotoPath: resp.photoPath
+                            };
+
+                            $.ajax({
+                                url: "/AdminPanel/Manager/New",
+                                method: "post",
+                                dataType: "json",
+                                data: { vm: vm },
+                                success: function (response) {
+                                    if (response.isOk)
+                                        alert(response.message);
+                                }
+                            });
+                        };
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<div class="col-md-12">
+    <div class="card card-primary">
+
+        <div class="card-header">
+            <h3 class="card-title">Yönetici Kayıt Formu</h3>
+        </div>
+
+        <form>
+
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Ad Soyad</label>
+                    <input type="text" class="form-control" id="txtFullName" placeholder="Ad Soyad Giriniz">
+                </div>
+                <div class="form-group">
+                    <label>Kullanıcı Adı</label>
+                    <input type="text" class="form-control" id="txtUserName" placeholder="Kullanıcı Adınızı Giriniz">
+                </div>
+                <div class="form-group">
+                    <label>Şifre</label>
+                    <input type="password" class="form-control" id="txtPassword" placeholder="Şifrenizi Giriniz">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="form-control" id="txtEmail" placeholder="Mail Adresinizi Giriniz">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputFile">File input</label>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="fuPhoto">
+                            <label class="custom-file-label">Fotoğraf Seç</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button id="btnSave" type="button" class="btn btn-primary">Kaydet</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
