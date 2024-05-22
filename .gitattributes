@@ -64,6 +64,8 @@
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
 
+*.sol linguist-language=Solidity
 *.js linguist-detectable=false
 *.css linguist-detectable=false
 *.html linguist-detectable=false
+
