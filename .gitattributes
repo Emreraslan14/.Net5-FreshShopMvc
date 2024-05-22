@@ -66,6 +66,7 @@
 *.js linguist-detectable=false
 *.css linguist-detectable=false
 *.html linguist-detectable=false
+*.htm inguist-detectable=false
 
 *.cs linguist-language=C#
 *.csproj linguist-language=XML
