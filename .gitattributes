@@ -62,7 +62,7 @@
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
 
-* linguist-vendored
+
 *.sol linguist-language=Solidity
 *.js linguist-detectable=false
 *.css linguist-detectable=false
