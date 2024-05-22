@@ -66,10 +66,8 @@
 *.sol linguist-language=Solidity
 *.js linguist-detectable=false
 *.css linguist-detectable=false
-*.html linguist-detectable=false
-*.html inguist-detectable=false
+*.cshtml linguist-detectable=false
 *.cs linguist-detectable=true
 *.cs linguist-language=C#
 *.csproj linguist-language=XML
 
-linguist-generated
