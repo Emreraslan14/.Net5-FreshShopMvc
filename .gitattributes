@@ -72,3 +72,4 @@
 *.cs linguist-language=C#
 *.csproj linguist-language=XML
 
+linguist-generated
