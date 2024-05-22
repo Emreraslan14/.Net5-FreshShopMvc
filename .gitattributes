@@ -11,8 +11,6 @@
 # Note: This is only used by command line
 ###############################################################################
 #*.cs     diff=csharp
-*.cs linguist-language=C#
-*.csproj linguist-language=XML
 
 ###############################################################################
 # Set the merge driver for project and solution files
